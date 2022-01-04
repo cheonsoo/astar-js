@@ -72,9 +72,9 @@
         const started = new Date();
         if (options.debug) console.log(`### clicked: nodeType: ${nodeTypeDef[nodeType]}, x: ${x}, y: ${y}`);
 
-        const astar = new Astar(self.nodes, options);
-        astar.search({ x, y });
-        self.animatePath(astar);
+        const ASTAR = new Astar(self.nodes, options);
+        ASTAR.search({ x, y });
+        self.animatePath(ASTAR);
 
         if(options.debug) console.log(`### Took: ${new Date() - started}ms`);
       });
@@ -143,7 +143,9 @@
     this.nodes = nodes;
    };
 
-  MapSearch.prototype.animatePath = async function(graph) {
+  MapSearch.prototype.animatePath = async function(ASTAR) {
+    if (!ASTAR.path || !ASTAR.path.length) return;
+
     function delay(delay) {
       const promise = new Promise((resolve, reject) => {
         setTimeout(function() {
@@ -163,6 +165,8 @@
       } else { // Mark Path
         const prevColor = cell.style.background;
         cell.style.background = 'RGBA(55, 154, 214, 1.00)';
+
+        // if keepTrackingPath is false, removes marked cell after the delay
         if (!options.keepTrackingPath) {
           setTimeout(function() {
             cell.style.background = prevColor;
@@ -171,11 +175,11 @@
       }
     };
 
-    markNode(graph.path[0].x, graph.path[0].y, 'start');
+    markNode(ASTAR.path[0].x, ASTAR.path[0].y, 'start');
 
     if (options.debug) {
       // Mark Green: Cost evaluated
-      graph.dirtyList.forEach(item => {
+      ASTAR.dirtyList.forEach(item => {
         const cell = this.findCell(item.x, item.y);
         cell.querySelector("#g").innerText = item.g;
         cell.querySelector("#h").innerText = item.h;
@@ -183,19 +187,19 @@
         cell.style.background = "green"
       });
 
-      graph.closedList.forEach(item => {
+      ASTAR.closedList.forEach(item => {
         const cell = this.findCell(item.x, item.y);
         cell.style.background = "red"
       });
 
-      console.log(`### Goal: ${graph.path.map(item => (`(${item.x}, ${item.y})`))}`);
+      console.log(`### Goal: ${ASTAR.path.map(item => (`(${item.x}, ${item.y})`))}`);
     }
 
     // Mark Blue: Shortest path to the goal
-    for (let i=0; i<graph.path.length; i++) {
-      const item = graph.path[i];
+    for (let i=0; i<ASTAR.path.length; i++) {
+      const item = ASTAR.path[i];
       await delay(options.pathTrailingDelay);
-      markNode(item.x, item.y, (i + 1) === graph.path.length ? 'goal' : 'path');
+      markNode(item.x, item.y, (i + 1) === ASTAR.path.length ? 'goal' : 'path');
     }
   };
 

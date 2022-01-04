@@ -11,9 +11,13 @@ function Astar(nodes, options) {
   this.path = [];
   this.options = options;
 
-  for (let x=0; x<nodes.length; x++) {
+  this.initialize();
+}
+
+Astar.prototype.initialize = function() {
+  for (let x=0; x<this.map.length; x++) {
     this.grid[x] = [];
-    for (let y=0, row = nodes[x]; y<row.length; y++) {
+    for (let y=0, row = this.map[x]; y<row.length; y++) {
       const node = new Node({ x, y, row });
       this.grid[x][y] = node;
       this.nodes.push(node);
@@ -22,14 +26,14 @@ function Astar(nodes, options) {
         this.startNode = node;
     }
   }
-}
+};
 
-Astar.prototype.initialize = function() {
+Astar.prototype.initMap = function() {
   this.cleanDirty();
 };
 
 Astar.prototype.search = function({ x, y }) {
-  this.initialize();
+  this.initMap();
 
   const openedList = [];
   this.dirtyList = []; // list been calculated & marked list. It's for the clean the map in order to restart. !!! Not using right now. find the way
@@ -48,7 +52,7 @@ Astar.prototype.search = function({ x, y }) {
     this.closedList.push(currentNode);
 
     // When it reaches the goal
-    if (currentNode.x === endNode.x && currentNode.y === endNode.y) {
+    if (currentNode === endNode) {
       let _n = currentNode;
       this.path.push({ x: _n.x, y: _n.y });
       while(_n.parent) {
@@ -232,7 +236,6 @@ function Node({ x, y, row }) {
   this.h = 0;
   this.f = 0;
   this.start = false;
-  this.end = false;
   this.visited = false;
   this.parent = null;
   this.closed = false;
@@ -240,8 +243,6 @@ function Node({ x, y, row }) {
 
   if (row[y] === "s")
     this.start = true;
-  // if (row[y] === "e")
-  //   this.end = true;
   if (row[y] === "w")
     this.wall = true;
 }
@@ -258,7 +259,6 @@ Node.prototype.clean = function() {
   this.g = 0;
   this.h = 0;
   this.start = false;
-  this.end = false;
   this.visited = false;
   this.closed = false;
   this.parent = null;
