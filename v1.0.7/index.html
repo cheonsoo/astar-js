@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>JavaScript A-Start Search Algorithm</title>
+  <style>
+    #astar-map {}
+    #astar-map .row {
+      display: flex;
+      flex-direction: row;
+      /* width: 800px; */
+    }
+    #astar-map .row:last-child {
+      border-bottom: 1px solid #e9e9e9;
+    }
+    #astar-map .row .cell {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+    #astar-map .row .cell {
+      border-top: 1px solid #e9e9e9;
+      border-left: 1px solid #e9e9e9;
+    }
+    #astar-map .row .cell:last-child {
+      border-right: 1px solid #e9e9e9;
+    }
+    #astar-map .row .cell.start {
+      background-color: rgb(55, 154, 214);
+    }
+    #astar-map .row .cell.end {
+      background-color: RGBA(57, 150, 250, 1.00);
+    }
+    #astar-map .row .cell.wall {
+      background-color: gray;
+    }
+    #astar-map .row .cell div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      cursor: pointer;
+    }
+    #astar-map .row .cell #f {
+      font-weight: 900;
+    }
+    #astar-map .row .cell div:nth-child(1),
+    #astar-map .row .cell div:nth-child(2) {
+      display: flex;
+      height: 50%;
+    }
+    #astar-map .row .cell div:nth-child(1) div,
+    #astar-map .row .cell div:nth-child(2) div {
+      width: 50%;
+      height: 100%;
+    }
+
+    #options-container #options-header {
+      height: 50px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+    #options-container #options {
+      margin-bottom: 50px;
+      display: none;
+    }
+    #options-container #options > #option {
+      display: flex;
+      margin-bottom: 5px;
+    }
+    #options-container #options > #option > div:nth-child(1) {
+      width: 150px;
+      font-weight: 900;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="options-container">
+    <div id="options-header" onclick="handleClickHideOptions(event)">
+      Options
+    </div>
+    <div id="options">
+      <div id="option">
+        <div>Debug</div>
+        <div>
+          <select id="debug" onchange="handleChangeOptions(event)">
+            <option value=true>TRUE</options>
+            <option value=false selected>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Allow Diagonal</div>
+        <div>
+          <select id="allowDiagonal" onchange="handleChangeOptions(event)">
+            <option value=true>TRUE</options>
+            <option value=false selected>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Keep Tracking Path</div>
+        <div>
+          <select id="keepTrackingPath" onchange="handleChangeOptions(event)">
+            <option value=true>TRUE</options>
+            <option value=false selected>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Path Hide Delay</div>
+        <div>
+          <input type="text" id="pathHideDelay" value="500" onkeyup="handleChangeOptions(event)" />
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Path Trailing Delay</div>
+        <div>
+          <input type="text" id="pathTrailingDelay" value="50" onkeyup="handleChangeOptions(event)" />
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Wall Frequency</div>
+        <div>
+          <input type="text" id="wallFrequency" value="10" onkeyup="resetWalls(event)" />
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Redraw Map</div>
+        <div>
+          x: <input type="text" id="mapSizeX" value="20" />
+          y: <input type="text" id="mapSizeY" value="20" />
+          <input type="button" value="Redraw" onclick="redrawMap(event)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <div id="astar-map">Initialize Map ...</div>
+  </div>
+
+  <template id="template-cell">
+    <div class="cell">
+      <div>
+        <div id="g"></div>
+        <div id="h"></div>
+      </div>
+      <div>
+        <div></div>
+        <div id="f"></div>
+      </div>
+    </div>
+  </template>
+
+  <script type="text/javascript" src="astar.js"></script>
+  <script type="text/javascript" src="custom_maps.js"></script>
+  <script type="text/javascript" src="map.js"></script>
+</body>
+</html>
