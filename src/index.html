@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>JavaScript A-Start Search Algorithm</title>
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+</head>
+
+<body>
+  <div id="options-container">
+    <div id="options-header" onclick="handleClickHideOptions(event)">
+      Options
+    </div>
+    <div id="options">
+      <div id="option">
+        <div>Debug</div>
+        <div>
+          <select id="debug" onchange="handleChangeOptions(event)">
+            <option value=true>TRUE</options>
+            <option value=false selected>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Allow Diagonal</div>
+        <div>
+          <select id="allowDiagonal" onchange="handleChangeOptions(event)">
+            <option value=true>TRUE</options>
+            <option value=false selected>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Keep Tracking Path</div>
+        <div>
+          <select id="keepTrackingPath" onchange="handleChangeOptions(event)">
+            <option value=true>TRUE</options>
+            <option value=false selected>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Path Hide Delay</div>
+        <div>
+          <input type="text" id="pathHideDelay" value="500" onkeyup="handleChangeOptions(event)" />
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Path Trailing Delay</div>
+        <div>
+          <input type="text" id="pathTrailingDelay" value="50" onkeyup="handleChangeOptions(event)" />
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Wall Frequency</div>
+        <div>
+          <select id="wallFrequency" onchange="handleChangeOptions(event)">
+            <option value='5'>5 (Most Complexity)</options>
+            <option value='10' selected>10</options>
+            <option value='20'>20</options>
+            <option value='30'>30</options>
+          </select>
+          <!-- <input type="text" id="wallFrequency" value="10" onkeyup="resetWalls(event)" /> -->
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Map Size</div>
+        <div>
+          <select id="mapSize" onchange="handleChangeMapSize(event)">
+            <option value='10x10'>10x10</options>
+            <option value='20x20'>20x20</options>
+            <option value='40x40' selected>40x40</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Custom Map</div>
+        <div>
+          <select id="customMap" onchange="handleChangeCustomMap(event)">
+            <option value='' selected></options>
+            <option value='map1'>Map #1 (20x20)</options>
+            <option value='map2'>Map #2 (20x20)</options>
+            <option value='map3'>Map #3 (40x40)</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>
+          <input type="button" value="Redraw" onclick="redrawMap(event)" />
+          <input type="button" value="Refresh" onclick="window.location.reload()" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <div>
+      <div id="astar-map">Initialize Map ...</div>
+    </div>
+  </div>
+
+  <template id="template-cell">
+    <div class="cell">
+      <div>
+        <div id="g"></div>
+        <div id="h"></div>
+      </div>
+      <div>
+        <div></div>
+        <div id="f"></div>
+      </div>
+    </div>
+  </template>
+
+  <script type="text/javascript" src="./assets/js/astar.js"></script>
+  <script type="text/javascript" src="./assets/js/custom_maps.js"></script>
+  <script type="text/javascript" src="./assets/js/map.js"></script>
+</body>
+</html>
