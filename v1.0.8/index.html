@@ -5,6 +5,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>JavaScript A-Start Search Algorithm</title>
   <style>
+    #container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
     #astar-map {}
     #astar-map .row {
       display: flex;
@@ -15,8 +21,8 @@
       border-bottom: 1px solid #e9e9e9;
     }
     #astar-map .row .cell {
-      width: 20px;
-      height: 20px;
+      max-width: 80px;
+      max-height: 80px;
       display: block;
     }
     #astar-map .row .cell {
@@ -129,23 +135,52 @@
       <div id="option">
         <div>Wall Frequency</div>
         <div>
-          <input type="text" id="wallFrequency" value="10" onkeyup="resetWalls(event)" />
+          <select id="wallFrequency" onchange="handleChangeOptions(event)">
+            <option value='5'>5 (Most Complexity)</options>
+            <option value='10' selected>10</options>
+            <option value='20'>20</options>
+            <option value='30'>30</options>
+          </select>
+          <!-- <input type="text" id="wallFrequency" value="10" onkeyup="resetWalls(event)" /> -->
         </div>
       </div>
 
       <div id="option">
-        <div>Redraw Map</div>
+        <div>Map Size</div>
         <div>
-          x: <input type="text" id="mapSizeX" value="20" />
-          y: <input type="text" id="mapSizeY" value="20" />
+          <select id="mapSize" onchange="handleChangeMapSize(event)">
+            <option value='10x10'>10x10</options>
+            <option value='20x20'>20x20</options>
+            <option value='40x40' selected>40x40</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Custom Map</div>
+        <div>
+          <select id="customMap" onchange="handleChangeCustomMap(event)">
+            <option value='' selected></options>
+            <option value='map1'>Map #1 (20x20)</options>
+            <option value='map2'>Map #2 (20x20)</options>
+            <option value='map3'>Map #3 (40x40)</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>
           <input type="button" value="Redraw" onclick="redrawMap(event)" />
+          <input type="button" value="Refresh" onclick="window.location.reload()" />
         </div>
       </div>
     </div>
   </div>
 
   <div id="container">
-    <div id="astar-map">Initialize Map ...</div>
+    <div>
+      <div id="astar-map">Initialize Map ...</div>
+    </div>
   </div>
 
   <template id="template-cell">
