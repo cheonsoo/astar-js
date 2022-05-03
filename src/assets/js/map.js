@@ -172,26 +172,6 @@
     const cellSize = Math.floor(clientWidth / options.mapSizeX);
     this.cellWidth = cellSize;
     this.cellHeight = cellSize;
-
-    /*
-    if (this.isMobile) {
-      const clientWidth = document.body.clientWidth;
-      const cellSize = Math.floor(clientWidth / options.mapSizeX);
-      this.cellWidth = cellSize;
-      this.cellHeight = cellSize;
-    } else {
-      if (self.options.mapSizeX <= 10) {
-        this.cellWidth = '80px';
-        this.cellHeight = '80px';
-      } else if (self.options.mapSizeX <= 20) {
-        this.cellWidth = '40px';
-        this.cellHeight = '40px';
-      } else {
-        this.cellWidth = '20px';
-        this.cellHeight = '20px';
-      }
-    }
-    */
   };
 
   /**
@@ -297,7 +277,7 @@
     const _MapSearch = new MapSearch({ map: astarMap, options });
     window.MapSearch = _MapSearch;
 
-    if (window.options.debug) console.log(`### AstarMap End [${new Date().getTime() - start.getTime()}ms]`);
+    if (window.MapSearch.options.debug) console.log(`### AstarMap End [${new Date().getTime() - start.getTime()}ms]`);
   }
   window.run = run;
   window.run();
@@ -311,12 +291,13 @@ function handleChangeOptions(evt) {
     return;
   }
 
-  if (typeof value === 'boolean')
+  if (value === 'true' || value === 'false')
     value = JSON.parse(value);
-  if (!isNaN(value))
+  else if (!isNaN(value))
     value = parseInt(value);
 
   console.log(`### id: ${id}, value: ${value}`);
+  console.log(typeof value);
   window.MapSearch.options[id] = value;
 }
 

@@ -46,14 +46,28 @@
       <div id="option">
         <div>Path Hide Delay</div>
         <div>
-          <input type="text" id="pathHideDelay" value="500" onkeyup="handleChangeOptions(event)" />
+          <select id="pathHideDelay" onchange="handleChangeOptions(event)">
+            <option value='0'>-</options>
+            <option value='100'>100</options>
+            <option value='300'>300</options>
+            <option value='500' selected>500</options>
+            <option value='1000'>1000</options>
+            <option value='2000'>2000</options>
+          </select>
         </div>
       </div>
 
       <div id="option">
         <div>Path Trailing Delay</div>
         <div>
-          <input type="text" id="pathTrailingDelay" value="50" onkeyup="handleChangeOptions(event)" />
+          <!-- <input type="text" id="pathTrailingDelay" value="50" onkeyup="handleChangeOptions(event)" /> -->
+          <select id="pathTrailingDelay" onchange="handleChangeOptions(event)">
+            <option value='0'>-</options>
+            <option value='10' selected>10</options>
+            <option value='30'>30</options>
+            <option value='50'>50</options>
+            <option value='100'>100</options>
+          </select>
         </div>
       </div>
 
@@ -66,7 +80,6 @@
             <option value='20'>20</options>
             <option value='30'>30</options>
           </select>
-          <!-- <input type="text" id="wallFrequency" value="10" onkeyup="resetWalls(event)" /> -->
         </div>
       </div>
 
