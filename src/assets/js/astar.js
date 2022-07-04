@@ -68,6 +68,7 @@ Astar.prototype.search = function({ start, end }) {
 
   while(openedList.length > 0) {
     const currentNode = openedList.pop(); // Get the node that has least F cost.
+    currentNode.visited = true;
     this.closedList.push(currentNode);
 
     // When it reaches the goal
@@ -134,6 +135,8 @@ Astar.prototype.search = function({ start, end }) {
         if (a.f > b.f) return -1;
         return 0;
       });
+
+      // console.log('### openedList', openedList);
     }
   }
 

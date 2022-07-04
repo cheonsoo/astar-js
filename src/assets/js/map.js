@@ -267,11 +267,16 @@
         cell.querySelector("#h").innerText = item.h;
         cell.querySelector("#f").innerText = item.f;
         cell.style.background = "green"
+        console.log(cell);
       });
 
       result.closedList.forEach(item => {
         const cell = this.findCell(item.x, item.y);
-        cell.style.background = "red";
+        if (cell.className.indexOf('start') >= 0) {
+          // Start
+        } else {
+          cell.style.background = "red";
+        }
       });
 
       console.log(`### Goal: ${result.path.map(item => (`(${item.x}, ${item.y})`))}`);

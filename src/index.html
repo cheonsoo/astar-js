@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -85,10 +86,12 @@
         <div>Custom Map</div>
         <div>
           <select id="customMap" onchange="handleChangeCustomMap(event)">
-            <option value='' selected></options>
+            <option value='' selected>
+              </options>
             <option value='map1'>Map #1 (20x20)</options>
             <option value='map2'>Map #2 (20x20)</options>
             <option value='map3'>Map #3 (40x40)</options>
+            <option value='mapTest' selected>Map #TEST (10x10)</options>
           </select>
         </div>
       </div>
@@ -125,4 +128,5 @@
   <script type="text/javascript" src="./assets/js/custom_maps.js"></script>
   <script type="text/javascript" src="./assets/js/map.js"></script>
 </body>
+
 </html>
