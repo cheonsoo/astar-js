@@ -18,16 +18,18 @@
   // Default options
   const options = {
     // Map Options
-    mapSizeX: 40,
-    mapSizeY: 40,
+    mapSizeX: 20,
+    mapSizeY: 20,
     wallFrequency: 10, // Walls are the lower, the more
     keepTrackingPath: false, // Make the path remains marked
     pathHideDelay: 500,
-    pathTrailingDelay: 10,
-    debug: false,
+    pathTrailingDelay: 100,
+    animatedSearch: true,
+    neighborSearchDelay: 200,
+    debug: true,
 
     // Search Options
-    allowDiagonal: false,
+    allowDiagonal: true,
     customMap: ''
   };
 
@@ -99,7 +101,7 @@
         const started = new Date();
         if (self.options.debug) console.log(`### clicked: nodeType: ${nodeTypeDef[nodeType]}, x: ${x}, y: ${y}`);
 
-        // const ASTAR = new Astar(self.nodes, self.options);
+        const ASTAR = new Astar(self.nodes, self.options);
         const start = self.start;
         const end = { x, y };
 
@@ -108,7 +110,17 @@
           return;
         }
 
-        const result = self.ASTAR.search({ start, end, map: self.nodes });
+        self.initialize();
+
+        const result = ASTAR.search({ start, end, map: self.nodes });
+
+        if (self.options.debug) {
+          console.log('options: ', self.options);
+          console.log(`start: x: ${start.x}, y: ${start.y}`);
+          console.log(`end: x: ${end.x}, y: ${end.y}`);
+          console.log('map', self.nodes);
+          console.log(result.path);
+        }
 
         // self.animatePath(JSON.parse(JSON.stringify(result)));
         if (!result || !result.path) {
@@ -116,7 +128,11 @@
           return;
         }
 
-        self.animatePath(result);
+        // console.log('result', result);
+        if (self.options.animatedSearch)
+          self.animatePath2(result);
+        else
+          self.animatePath(result);
 
         self.start = { x: end.x, y: end.y };
 
@@ -243,7 +259,7 @@
       if (type === 'goal') { // Mark Goal
         cell.style.background = 'RGBA(55, 154, 214, 1.00)';
       } else if (type === 'start') {
-        cell.style.background = '#ffffff';
+        cell.style.background = this.options.debug ? 'orange' : '#ffffff';
       } else { // Mark Path
         const prevColor = cell.style.background;
         cell.style.background = 'RGBA(55, 154, 214, 1.00)';
@@ -257,8 +273,6 @@
       }
     };
 
-    markNode(result.path[0].x, result.path[0].y, 'start');
-
     if (this.options.debug) {
       // Mark Green: Cost evaluated
       result.dirtyList.forEach(item => {
@@ -267,17 +281,14 @@
         cell.querySelector("#h").innerText = item.h;
         cell.querySelector("#f").innerText = item.f;
         cell.style.background = "green"
-        console.log(cell);
       });
 
       result.closedList.forEach(item => {
         const cell = this.findCell(item.x, item.y);
-        if (cell.className.indexOf('start') >= 0) {
-          // Start
-        } else {
-          cell.style.background = "red";
-        }
+        cell.style.background = "red";
       });
+
+      markNode(result.path[0].x, result.path[0].y, 'start');
 
       console.log(`### Goal: ${result.path.map(item => (`(${item.x}, ${item.y})`))}`);
     }
@@ -287,6 +298,73 @@
       const item = result.path[i];
       await delay(this.options.pathTrailingDelay);
       markNode(item.x, item.y, (i + 1) === result.path.length ? 'goal' : 'path');
+    }
+  };
+
+  MapSearch.prototype.animatePath2 = async function(result) {
+    if (!result.path || !result.path.length) return;
+
+    function delay(delay) {
+      const promise = new Promise((resolve, reject) => {
+        setTimeout(function() {
+          resolve(true);
+        }, delay);
+      });
+      return promise;
+    }
+
+    const markNode = (x, y, type) => {
+      const cell = this.findCell(x, y);
+
+      if (type === 'goal') { // Mark Goal
+        cell.style.background = 'RGBA(55, 154, 214, 1.00)';
+      } else if (type === 'start') {
+        cell.style.background = this.options.debug ? 'orange' : '#ffffff';
+      } else { // Mark Path
+        const prevColor = cell.style.background;
+        cell.style.background = 'RGBA(55, 154, 214, 1.00)';
+
+        // if keepTrackingPath is false, removes marked cell after the delay
+        if (!this.options.keepTrackingPath) {
+          setTimeout(function() {
+            cell.style.background = prevColor;
+          }, this.options.pathHideDelay);
+        }
+      }
+    };
+
+    if (this.options.debug) {
+      for (let a=0; a<result.animateList.length; a++) {
+        const item = result.animateList[a];
+        const node = item[0];
+        const neighbors = item[1];
+
+        const el = this.findCell(node.x, node.y);
+        el.style.backgroundColor = 'red';
+
+        neighbors.forEach(n => {
+          const cell = this.findCell(n.x, n.y);
+          cell.querySelector("#g").innerText = n.g;
+          cell.querySelector("#h").innerText = n.h;
+          cell.querySelector("#f").innerText = n.f;
+          cell.style.backgroundColor = 'green';
+        });
+
+        await delay(this.options.neighborSearchDelay);
+      }
+
+      console.log(`### Goal: ${result.path.map(item => (`(${item.x}, ${item.y})`))}`);
+    }
+
+    // Mark Blue: Shortest path to the goal
+    for (let i=0; i<result.path.length; i++) {
+      const item = result.path[i];
+      await delay(this.options.pathTrailingDelay);
+      if (i === 0) {
+        markNode(item.x, item.y, 'start');
+      } else {
+        markNode(item.x, item.y, (i + 1) === result.path.length ? 'goal' : 'path');
+      }
     }
   };
 
@@ -316,7 +394,7 @@ function handleChangeOptions(evt) {
     return;
   }
 
-  if (typeof value === 'boolean')
+  if (value === 'true' || value === 'false')
     value = JSON.parse(value);
   if (!isNaN(value))
     value = parseInt(value);

@@ -8,6 +8,7 @@ function Astar(nodes, options) {
   this.grid = [];
   this.dirtyList = []; // All the evaluated nodes, to be marked as green
   this.closedList = []; // All the visited nodes, to be marked as red
+  this.animateList = [];
   this.path = [];
   this.options = options;
 
@@ -52,7 +53,7 @@ Astar.prototype.search = function({ start, end }) {
   // this.initStart({ start, end });
   this.initMap();
 
-  const openedList = [];
+  let openedList = [];
   this.closedList = [];
   this.dirtyList = []; // list been calculated & marked list. It's for the clean the map in order to restart. !!! Not using right now. find the way
   this.path = [];
@@ -69,6 +70,7 @@ Astar.prototype.search = function({ start, end }) {
   while(openedList.length > 0) {
     const currentNode = openedList.pop(); // Get the node that has least F cost.
     currentNode.visited = true;
+
     this.closedList.push(currentNode);
 
     // When it reaches the goal
@@ -97,27 +99,23 @@ Astar.prototype.search = function({ start, end }) {
       return {
         path: this.path,
         dirtyList: this.dirtyList,
-        closedList: this.closedList
+        closedList: this.closedList,
+        animateList: this.animateList
       };
     }
 
     currentNode.closed = true;
 
     const neighbors = this.neighbors(currentNode);
+    // openedList = [];
     for (let i=0; i<neighbors.length; i++) {
       const neighbor = neighbors[i];
-
-      if (neighbor.wall) {
-        continue;
-      }
-
       const gScore = currentNode.g + neighbor.getCost(currentNode);
 
       if (!neighbor.visited || gScore < neighbor.g) {
         neighbor.visited = true;
         neighbor.parent = currentNode;
         neighbor.h = this.heuristics(neighbor, endNode, 'manhattan'); // manhattan, diagonal, pythagoras
-        // neighbor.h = this.heuristics(neighbor, endNode, 'menhattan');
         neighbor.g = gScore;
         neighbor.f = neighbor.h + neighbor.g;
 
@@ -135,9 +133,9 @@ Astar.prototype.search = function({ start, end }) {
         if (a.f > b.f) return -1;
         return 0;
       });
-
-      // console.log('### openedList', openedList);
     }
+
+    this.animateList.push([currentNode, neighbors]);
   }
 
   return [];

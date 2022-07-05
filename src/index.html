@@ -18,8 +18,18 @@
         <div>Debug</div>
         <div>
           <select id="debug" onchange="handleChangeOptions(event)">
-            <option value=true>TRUE</options>
-            <option value=false selected>FALSE</options>
+            <option value=true selected>TRUE</options>
+            <option value=false>FALSE</options>
+          </select>
+        </div>
+      </div>
+
+      <div id="option">
+        <div>Animated Search</div>
+        <div>
+          <select id="animatedSearch" onchange="handleChangeOptions(event)">
+            <option value=true selected>TRUE</options>
+            <option value=false>FALSE</options>
           </select>
         </div>
       </div>
@@ -28,8 +38,8 @@
         <div>Allow Diagonal</div>
         <div>
           <select id="allowDiagonal" onchange="handleChangeOptions(event)">
-            <option value=true>TRUE</options>
-            <option value=false selected>FALSE</options>
+            <option value=true selected>TRUE</options>
+            <option value=false>FALSE</options>
           </select>
         </div>
       </div>
@@ -91,7 +101,8 @@
             <option value='map1'>Map #1 (20x20)</options>
             <option value='map2'>Map #2 (20x20)</options>
             <option value='map3'>Map #3 (40x40)</options>
-            <option value='mapTest' selected>Map #TEST (10x10)</options>
+            <option value='mapTest'>Map #TEST (10x10)</options>
+            <option value='mapEmpty'>Map #Empty (10x10)</options>
           </select>
         </div>
       </div>
