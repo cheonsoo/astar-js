@@ -25,7 +25,7 @@
     pathHideDelay: 500,
     pathTrailingDelay: 100,
     animatedSearch: true,
-    neighborSearchDelay: 200,
+    animatedSearchDelay: 200,
     debug: true,
 
     // Search Options
@@ -99,6 +99,9 @@
 
       _cell.addEventListener("click", () => {
         const started = new Date();
+
+        initOptions(self.options);
+
         if (self.options.debug) console.log(`### clicked: nodeType: ${nodeTypeDef[nodeType]}, x: ${x}, y: ${y}`);
 
         const ASTAR = new Astar(self.nodes, self.options);
@@ -114,21 +117,11 @@
 
         const result = ASTAR.search({ start, end, map: self.nodes });
 
-        if (self.options.debug) {
-          console.log('options: ', self.options);
-          console.log(`start: x: ${start.x}, y: ${start.y}`);
-          console.log(`end: x: ${end.x}, y: ${end.y}`);
-          console.log('map', self.nodes);
-          console.log(result.path);
-        }
-
-        // self.animatePath(JSON.parse(JSON.stringify(result)));
         if (!result || !result.path) {
           console.log('no path');
           return;
         }
 
-        // console.log('result', result);
         if (self.options.animatedSearch)
           self.animatePath2(result);
         else
@@ -136,7 +129,14 @@
 
         self.start = { x: end.x, y: end.y };
 
-        if(self.options.debug) console.log(`### Took: ${new Date() - started}ms`);
+        if(self.options.debug) {
+          console.log('options: ', self.options);
+          console.log(`start: x: ${start.x}, y: ${start.y}`);
+          console.log(`end: x: ${end.x}, y: ${end.y}`);
+          console.log('map', self.nodes);
+          console.log(`### Goal: ${result.path.map(item => (`(${item.x}, ${item.y})`)).join(', ')}`);
+          console.log(`### Took: ${new Date() - started}ms`);
+        }
       });
     }
 
@@ -188,26 +188,6 @@
     const cellSize = Math.floor(clientWidth / options.mapSizeX);
     this.cellWidth = cellSize;
     this.cellHeight = cellSize;
-
-    /*
-    if (this.isMobile) {
-      const clientWidth = document.body.clientWidth;
-      const cellSize = Math.floor(clientWidth / options.mapSizeX);
-      this.cellWidth = cellSize;
-      this.cellHeight = cellSize;
-    } else {
-      if (self.options.mapSizeX <= 10) {
-        this.cellWidth = '80px';
-        this.cellHeight = '80px';
-      } else if (self.options.mapSizeX <= 20) {
-        this.cellWidth = '40px';
-        this.cellHeight = '40px';
-      } else {
-        this.cellWidth = '20px';
-        this.cellHeight = '20px';
-      }
-    }
-    */
   };
 
   /**
@@ -289,8 +269,6 @@
       });
 
       markNode(result.path[0].x, result.path[0].y, 'start');
-
-      console.log(`### Goal: ${result.path.map(item => (`(${item.x}, ${item.y})`))}`);
     }
 
     // Mark Blue: Shortest path to the goal
@@ -350,10 +328,8 @@
           cell.style.backgroundColor = 'green';
         });
 
-        await delay(this.options.neighborSearchDelay);
+        await delay(this.options.animatedSearchDelay);
       }
-
-      console.log(`### Goal: ${result.path.map(item => (`(${item.x}, ${item.y})`))}`);
     }
 
     // Mark Blue: Shortest path to the goal
@@ -374,6 +350,9 @@
 
   function run() {
     const start = new Date();
+
+    initOptions(options);
+
     if (window.options.debug) console.log(`### AstarMap Start [${start}]`);
 
     const astarMap = document.querySelector("#astar-map");
@@ -385,6 +364,23 @@
   window.run = run;
   window.run();
 }());
+
+function initOptions(options) {
+  options.debug = JSON.parse(document.querySelector('#debug').value);
+  options.animatedSearch = JSON.parse(document.querySelector('#animatedSearch').value);
+  options.animatedSearchDelay = parseInt(document.querySelector('#animatedSearchDelay').value);
+  options.allowDiagonal = JSON.parse(document.querySelector('#allowDiagonal').value);
+  options.keepTrackingPath = JSON.parse(document.querySelector('#keepTrackingPath').value);
+  options.pathHideDelay = parseInt(document.querySelector('#pathHideDelay').value);
+  options.pathTrailingDelay = parseInt(document.querySelector('#pathTrailingDelay').value);
+  options.wallFrequency = parseInt(document.querySelector('#wallFrequency').value);
+  const mapSize = document.querySelector('#mapSize').value;
+  options.mapSizeX = parseInt(mapSize.split('x')[0]);
+  options.mapSizeY = parseInt(mapSize.split('x')[1]);
+  options.customMap = document.querySelector('#customMap').value;
+
+  // console.log(options);
+}
 
 function handleChangeOptions(evt) {
   const id = evt.target.id;
