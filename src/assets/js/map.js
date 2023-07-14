@@ -295,10 +295,18 @@
   };
 
   function run() {
+    const url = new URL(window.location.href);
+    const urlParams = url.searchParams;
+    const mode = urlParams.get('mode');
+
     const start = new Date();
     if (window.options.debug) console.log(`### AstarMap Start [${start}]`);
 
     const astarMap = document.querySelector("#astar-map");
+
+    if (mode && mode === "default") {
+      document.querySelector("#options-header").style.display = "none";
+    }
     const _MapSearch = new MapSearch({ map: astarMap, options });
     window.MapSearch = _MapSearch;
 
