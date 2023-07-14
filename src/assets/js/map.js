@@ -295,17 +295,23 @@
   };
 
   function run() {
-    const url = new URL(window.location.href);
-    const urlParams = url.searchParams;
-    const mode = urlParams.get('mode');
-
     const start = new Date();
     if (window.options.debug) console.log(`### AstarMap Start [${start}]`);
 
     const astarMap = document.querySelector("#astar-map");
 
-    if (mode && mode === "default") {
+    const url = new URL(window.location.href);
+    const urlParams = url.searchParams;
+    if (urlParams.get("mode") === "default") {
       document.querySelector("#options-header").style.display = "none";
+      options.customMap = "map3";
+    } else {
+      if (urlParams.get("customMap")) {
+        options.customMap = urlParams.get("customMap");
+      }
+      if (urlParams.get("hideOptions") === "true") {
+        document.querySelector("#options-header").style.display = "none";
+      }
     }
     const _MapSearch = new MapSearch({ map: astarMap, options });
     window.MapSearch = _MapSearch;
