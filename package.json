@@ -1,0 +1,26 @@
+{
+  "name": "astar-simulator",
+  "version": "1.0.5",
+  "description": "A-Star Simulator",
+  "main": "./src/index.html",
+  "scripts": {
+    "start": "serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheonsoo/astar-js.git"
+  },
+  "keywords": [
+    "astar",
+    "codesandbox"
+  ],
+  "author": "Chance",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cheonsoo/astar-js.git"
+  },
+  "homepage": "https://github.com/cheonsoo/astar-js.git#readme",
+  "devDependencies": {
+    "serve": "^11.2.0"
+  }
+}
