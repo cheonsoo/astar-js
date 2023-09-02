@@ -4,11 +4,29 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>JavaScript A-Start Search Algorithm</title>
+  <title>A-Star Simulator</title>
   <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 </head>
 
 <body>
+  <script id="toggle-switch" type="text/template">
+    <label>
+      <span>{label}</span>
+      <input role="switch" type="checkbox" />
+    </label>
+  </script>
+
+  <!-- <script type="text/javascript" src="./components/toggleSwitch/index.js"></script> -->
+  <script type="module" src="./components/toggleSwitch/index.js"></script>
+  <script type="text/javascript">
+    function test() {
+      console.log('### TEST ###');
+    }
+  </script>
+
+  <toggle-switch label="DEBUG" onClick="test"></toggle-switch>
+  <!-- <toggle-switch label="DEBUG" onclick="() => { console.log('### TEST ###'); }"></toggle-switch> -->
+
   <div id="options-container">
     <div id="options-header" onclick="handleClickHideOptions(event)">
       Options

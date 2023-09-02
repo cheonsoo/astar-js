@@ -4,7 +4,7 @@
   "description": "A-Star Simulator",
   "main": "./src/index.html",
   "scripts": {
-    "start": "serve"
+    "start": "serve src"
   },
   "repository": {
     "type": "git",
